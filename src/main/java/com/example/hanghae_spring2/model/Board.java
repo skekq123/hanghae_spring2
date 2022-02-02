@@ -15,6 +15,7 @@ public class Board {
     // ID가 자동으로 생성 및 증가합니다.
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
+    @Column(name = "board_id")
     private Long id;
 
     // 반드시 값을 가지도록 합니다.

@@ -48,12 +48,53 @@
                         let title = board['title'];
                         let contents = board['contents'];
                         boardHtml(id, title, contents);
+                        getComment(id);
                     }
                 }
             })
         }
+        function getComment(id) {
+            $('#comment-box').empty();
+            $.ajax({
+                type: "GET",
+                url: "api/comments/"+id,
+                data: {},
+                success: function (response) {
+                    for (let i = 0; i < response.length; ++i) {
+                        let comment = response[i];
+                        let contents = comment['contents'];
+                        let username = comment['username'];
+                        commentHtml(contents, username, id);
+                    }
+                }
+            })
+        }
+        function writeComment(id) {
+            let contents = $('#comment-contents'+id).val();
+            let boardId = id;
+            let data = {'contents' : contents, 'boardId' : boardId}
+            $.ajax({
+                type: "POST",
+                url: "api/comments",
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function (response) {
+                    alert('댓글이 작성되었습니다.');
+                    window.location.reload();
+                }
+            });
+        }
+        function commentHtml(contents, username, id) {
+            let curBoard =`<div class="card">
+                    <div class="card-header">${username}</div>
+                <div class="card-body"><p class="card-text">${contents}</p></div>
+                </div>`
+                let box = "#comment-box" + id;
+                $(box).append(curBoard);
+        }
         function boardHtml(id, title, contents) {
-            let curBoard = `<div class="card-body"><a id="detailId" data-toggle="modal" data-target="#detailModal${id}" href="javascript:void(0)">${title}</a></div>
+            let curBoard = `
+<div class="card-body"><a id="detailId" data-toggle="modal" data-target="#detailModal${id}" href="javascript:void(0)">${title}</a></div>
 <div class="modal fade" id="detailModal${id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -70,10 +111,19 @@
                     <label>내용 : </label>
                     ${contents}
                 </div>
+                <div class="input-group mb-3">
+                <input type="text" class="form-control" id="comment-contents${id}" aria-label="Recipient's username" aria-describedby="button-addon2">
+                <button class="btn btn-outline-secondary" onclick="writeComment(${id})" type="button" id="button-addon2">댓글 남기기</button>
+                </div>
+
+                <div id="comment-box${id}"></div>
+
             </div>
         </div>
     </div>
-</div>`;
+</div>
+
+`;
             $('#board-box').append(curBoard);
         }
     </script>

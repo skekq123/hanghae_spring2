@@ -34,6 +34,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
 // image 폴더를 login 없이 허용
                 .antMatchers("/images/**").permitAll()
+// css 폴더를 login 없이 허용
+                .antMatchers("/css/**").permitAll()
 // 회원 관리 처리 API 전부를 login 없이 허용
                 .antMatchers("/user/**").permitAll()
 // 그 외 어떤 요청이든 '인증'
@@ -57,6 +59,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/user/logout")
                 .permitAll()
                 .and()
-                .exceptionHandling();
+                .exceptionHandling()
+// "접근 불가" 페이지 URL 설정
+                .accessDeniedPage("/forbidden.html");
     }
 }
