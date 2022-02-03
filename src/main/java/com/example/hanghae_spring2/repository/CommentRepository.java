@@ -9,8 +9,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findAllByBoardId(Long boardId);
-
+    List<Comment> findAllByBoardIdOrderByModifiedAtDesc(Long boardId);
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query("UPDATE Comment a SET a.contents =?2 WHERE a.id=?1")

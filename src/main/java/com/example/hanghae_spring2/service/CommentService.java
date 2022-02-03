@@ -25,7 +25,7 @@ public class CommentService {
     }
 
     public List<Comment> getComment(Long boardId) {
-        return commentRepository.findAllByBoardId(boardId);
+        return commentRepository.findAllByBoardIdOrderByModifiedAtDesc(boardId);
     }
 
     public Long deleteComment(Long id) {
