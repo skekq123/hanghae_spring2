@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <meta charset="UTF-8">
     <title>회원가입 페이지</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         function onclickAdmin() {
 // Get the checkbox
@@ -24,18 +25,31 @@
                 box.style.display = "none";
             }
         }
+        function checkPassword() {
+            let password = $('#password').val();
+            let checkPassword = $('#check-password').val();
+            if(password != checkPassword) {
+                alert("check 비밀번호 다시 확인!");
+                return false;
+            }
+            alert("회원가입 완료!");
+            return true;
+        }
     </script>
 </head>
 <body>
 <div id="login-form">
     <div id="login-title">Sign up Select Shop</div>
 
-    <form action="/user/signup" method="post">
+    <form action="/user/signup" method="post" onsubmit="return checkPassword();"  >
         <div class="login-id-label">Username</div>
         <input type="text" name="username" placeholder="Username" class="login-input-box">
 
         <div class="login-id-label">Password</div>
-        <input type="password" name="password" class="login-input-box">
+        <input id="password" type="password" name="password" class="login-input-box">
+
+        <div class="login-id-label">Check Password</div>
+        <input id="check-password" type="password" name="Check-password" class="login-input-box">
 
         <div class="login-id-label">E-mail</div>
         <input type="text" name="email" placeholder="E-mail" class="login-input-box">
@@ -44,7 +58,7 @@
             <input id="admin-check" type="checkbox" name="admin" onclick="onclickAdmin()" style="margin-top: 40px;">관리자
             <input id="admin-token" type="password" name="adminToken" placeholder="관리자 암호" class="login-input-box" style="display:none">
         </div>
-        <button id="login-id-submit">회원 가입</button>
+        <input type="submit" id="login-id-submit">회원 가입</input>
     </form>
 </div>
 </body>
