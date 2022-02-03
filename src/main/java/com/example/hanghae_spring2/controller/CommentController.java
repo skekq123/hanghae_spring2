@@ -38,4 +38,17 @@ public class CommentController {
     public List<Comment> getComment(@PathVariable Long id) {
         return commentService.getComment(id);
     }
+
+    //댓글 삭제
+    @DeleteMapping("/api/comments/{id}")
+    public Long deleteComment(@PathVariable Long id) {
+        commentService.deleteComment(id);
+        return id;
+    }
+
+    //댓글 수정
+    @PostMapping("/api/comments/edit/{id}")
+    public int updateComment(@PathVariable Long id, @RequestBody CommentRequestDto requestDto) {
+        return commentService.updateComment(requestDto, id);
+    }
 }

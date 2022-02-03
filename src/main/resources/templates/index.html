@@ -64,7 +64,8 @@
                         let comment = response[i];
                         let contents = comment['contents'];
                         let username = comment['username'];
-                        commentHtml(contents, username, id);
+                        let commentId = comment['id'];
+                        commentHtml(contents, username, id, commentId);
                     }
                 }
             })
@@ -84,11 +85,54 @@
                 }
             });
         }
-        function commentHtml(contents, username, id) {
+        function deleteComment(id) {
+            $.ajax({
+                type: "DELETE",
+                url: "api/comments/"+id,
+                data: {},
+                success: function (response) {
+                    alert('댓글이 삭제되었습니다.');
+                    window.location.reload();
+                }
+            })
+        }
+        function updateComment(id) {
+            let contents = $('#update-contents'+id).val();
+            let data = {'contents': contents};
+            $.ajax({
+                type: "POST",
+                url: "api/comments/edit/"+id,
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function (response) {
+                    alert('댓글이 수정되었습니다.');
+                    window.location.reload();
+                }
+            })
+        }
+        function commentHtml(contents, username, id, commentId) {
             let curBoard =`<div class="card">
-                    <div class="card-header">${username}</div>
+                    <div class="card-header">${username}<button style="float: right" onclick="deleteComment(${commentId})">삭제</button>
+                    <button data-toggle="modal" data-target="#commentModal${commentId}" href="javascript:void(0)" style="float: right">수정</button></div>
                 <div class="card-body"><p class="card-text">${contents}</p></div>
-                </div>`
+                </div>
+                    <div class="modal fade" id="commentModal${commentId}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="card-body">
+                <input type="text" class="form-control" id="update-contents${commentId}" aria-label="Recipient's username" aria-describedby="button-addon2">
+                <button class="btn btn-outline-secondary" onclick="updateComment(${commentId})" type="button" id="button-addon2">수정하기</button>
+                </div>
+
+                <div id="comment-box${id}"></div>
+
+            </div>
+        </div>
+    </div>
+`
                 let box = "#comment-box" + id;
                 $(box).append(curBoard);
         }

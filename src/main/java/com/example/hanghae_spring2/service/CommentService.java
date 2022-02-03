@@ -27,4 +27,13 @@ public class CommentService {
     public List<Comment> getComment(Long boardId) {
         return commentRepository.findAllByBoardId(boardId);
     }
+
+    public Long deleteComment(Long id) {
+        commentRepository.deleteById(id);
+        return id;
+    }
+
+    public int updateComment(CommentRequestDto requestDto, Long id) {
+        return commentRepository.updateComment(id, requestDto.getContents());
+    }
 }
